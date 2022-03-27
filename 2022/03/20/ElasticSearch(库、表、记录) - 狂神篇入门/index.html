@@ -1,0 +1,935 @@
+<!DOCTYPE html><html lang="zh-CN"><head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.151/js/clicklove.js"></script><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/favicon/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/favicon/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="我的ElasticSearch基础入门笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch(库、表、记录) - 入门">
+<meta property="og:url" content="http://example.com/2022/03/20/ElasticSearch(%E5%BA%93%E3%80%81%E8%A1%A8%E3%80%81%E8%AE%B0%E5%BD%95)%20-%20%E7%8B%82%E7%A5%9E%E7%AF%87%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="布小新的博客">
+<meta property="og:description" content="我的ElasticSearch基础入门笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901102154194.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901122752602.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901123357852.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901123428677.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124448947.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124514069.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124620497.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124640733.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124851022.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901125242970.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901152432828.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901152651355.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901153001376.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901153524585.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901153930053.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901154117970.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901154218434.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20211216142159148.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20211216142414601.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901155109102.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901155350770.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901155456552.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160121662.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160150802.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160714138.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160938676.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901161254920.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902105301874.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902110339025.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902110402345.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902110528324.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902111241544.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902112117729.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902112718238.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902113308183.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902113329930.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902150701139.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902150807827.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902151058613.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902151355320.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902151839877.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902152036305.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902152444930.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902152845363.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902153106388.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902153242340.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902153715766.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154224098.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154615839.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154908396.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154923978.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902160231604.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902160917322.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902161138654.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903101255730.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903103023404.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903105926215.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903110606796.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903110625586.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903113515670.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903114320162.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903114509427.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903142650016.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903142704362.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903151124368.png">
+<meta property="og:image" content="c:%5CUsers%5Cwcy%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210903152232054.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20211216142836513.png">
+<meta property="article:published_time" content="2022-03-20T06:03:00.000Z">
+<meta property="article:modified_time" content="2022-03-20T08:33:57.489Z">
+<meta property="article:author" content="乄帝">
+<meta property="article:tag" content="ElasticSearch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901102154194.png"><title>ElasticSearch(库、表、记录) - 入门 | 布小新的博客</title><link ref="canonical" href="http://example.com/2022/03/20/ElasticSearch(%E5%BA%93%E3%80%81%E8%A1%A8%E3%80%81%E8%AE%B0%E5%BD%95)%20-%20%E7%8B%82%E7%A5%9E%E7%AF%87%E5%85%A5%E9%97%A8/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.0.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-tree"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-book"></i></span><span class="header-nav-menu-item__text">关于</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="javascript:;" onclick="return false;"><span class="header-nav-menu-item__icon"><i class="fas fa-cat"></i></span><span class="header-nav-menu-item__text">生活</span></a><div class="header-nav-submenu"><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/html/reading/"><span class="header-nav-submenu-item__icon"><i class="fas fa-book-reader"></i></span><span class="header-nav-submenu-item__text">阅读</span></a></div></div></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">布小新的博客</div><div class="header-banner-info__subtitle">欢迎来到我的博客</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div><script src="/live2d-widget-master/autoload.js"></script></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">ElasticSearch(库、表、记录) - 入门</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-03-20</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-03-20</span></span></div></header><div class="post-body">
+        <h1 id="ElasticSearch-库、表、记录-入门"   >
+          <a href="#ElasticSearch-库、表、记录-入门" class="heading-link"><i class="fas fa-link"></i></a><a href="#ElasticSearch-库、表、记录-入门" class="headerlink" title="ElasticSearch(库、表、记录) - 入门"></a>ElasticSearch(库、表、记录) - 入门</h1>
+      <p>版本这里我使用的是7.6.2</p>
+
+        <h2 id="讲什么？"   >
+          <a href="#讲什么？" class="heading-link"><i class="fas fa-link"></i></a><a href="#讲什么？" class="headerlink" title="讲什么？"></a>讲什么？</h2>
+      <p>1.创始人</p>
+<p>2.货比三家</p>
+<p>3.安装</p>
+<p>4.生态</p>
+<p>5.测试（分词器）</p>
+<p>6.RestFul操作 ES</p>
+<p>7.CRUD</p>
+<p>8.SpringBoot集成ElasticSearch</p>
+<p>9.爬虫爬取数据</p>
+<p>10.实战、模拟全文检索</p>
+
+        <h2 id="Doug-Cutting（这个人也搞了Hadoop）"   >
+          <a href="#Doug-Cutting（这个人也搞了Hadoop）" class="heading-link"><i class="fas fa-link"></i></a><a href="#Doug-Cutting（这个人也搞了Hadoop）" class="headerlink" title="Doug Cutting（这个人也搞了Hadoop）"></a>Doug Cutting（这个人也搞了Hadoop）</h2>
+      <p>这个人一开始用java写了Lucene，目标是为各种中小型应用软件加入全文检索功能</p>
+<p>大数据就两个问题：存储加计算</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901102154194.png" alt="image-20210901102154194"></p>
+<p>回到主题</p>
+<p>Lucene是一套信息检索工具包（信息检索程序库）！jar包！（ES是对Lucene Api的封装）不包含搜索引擎</p>
+<p>包含的：索引结构、读写索引的工具、排序、搜索规则…工具类</p>
+<p>Lucene和ElasticSearch关系：</p>
+<p>ElasticSearch是基于Lucene做了一些封装和增强</p>
+
+        <h2 id="ElasticSearch概述"   >
+          <a href="#ElasticSearch概述" class="heading-link"><i class="fas fa-link"></i></a><a href="#ElasticSearch概述" class="headerlink" title="ElasticSearch概述"></a>ElasticSearch概述</h2>
+      <p>ElaticSearch,简称es，es是一个开源的高扩展的分布式全文检索引擎，它可以近乎实时地存储、检索数据；本身扩展性很好，可以扩展到上百台服务器、处理PB级别地数据。es也使用Java开发并使用Lucene作为其核心来实现所有索引和搜索功能，它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单</p>
+
+        <h2 id="ElasticSearch安装"   >
+          <a href="#ElasticSearch安装" class="heading-link"><i class="fas fa-link"></i></a><a href="#ElasticSearch安装" class="headerlink" title="ElasticSearch安装"></a>ElasticSearch安装</h2>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901122752602.png" alt="image-20210901122752602"></p>
+
+        <h3 id="熟悉目录"   >
+          <a href="#熟悉目录" class="heading-link"><i class="fas fa-link"></i></a><a href="#熟悉目录" class="headerlink" title="熟悉目录"></a>熟悉目录</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bin 启动文件</span><br><span class="line">config 配置文件</span><br><span class="line">	log4j2 日志配置文件</span><br><span class="line">	jvm.options JVM参数配置文件</span><br><span class="line">	elasticsearch.yml 配置文件 默认 9200端口</span><br><span class="line">lib 相关jar包</span><br><span class="line">logs 日志</span><br><span class="line">modules 功能模块</span><br><span class="line">plugins 插件</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="启动"   >
+          <a href="#启动" class="heading-link"><i class="fas fa-link"></i></a><a href="#启动" class="headerlink" title="启动"></a>启动</h3>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901123357852.png" alt="image-20210901123357852"></p>
+<p>访问127.0.0.1:9200</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901123428677.png" alt="image-20210901123428677"></p>
+<p>可视化界面</p>
+<p>head插件</p>
+<p>下载这个前端项目 然后。。。</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124448947.png" alt="image-20210901124448947"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124514069.png" alt="image-20210901124514069"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124620497.png" alt="image-20210901124620497"></p>
+<p>这里连接不上会出现跨域问题</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124640733.png" alt="image-20210901124640733"></p>
+<p>在es的yml配置文件中加上配置</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901124851022.png" alt="image-20210901124851022"></p>
+<p>然后访问</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901125242970.png" alt="image-20210901125242970"></p>
+<p>这里索引 才开始理解的话 就把它当成一个数据库</p>
+
+        <h2 id="kibana下载安装"   >
+          <a href="#kibana下载安装" class="heading-link"><i class="fas fa-link"></i></a><a href="#kibana下载安装" class="headerlink" title="kibana下载安装"></a>kibana下载安装</h2>
+      <p>启动 bin下bat</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901152432828.png" alt="image-20210901152432828"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901152651355.png" alt="image-20210901152651355"></p>
+<p>以后操作都在这写</p>
+<p>汉化！</p>
+<p>修改配置即可</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901153001376.png" alt="image-20210901153001376"></p>
+
+        <h2 id="ES核心概念"   >
+          <a href="#ES核心概念" class="heading-link"><i class="fas fa-link"></i></a><a href="#ES核心概念" class="headerlink" title="ES核心概念"></a>ES核心概念</h2>
+      
+        <h3 id="概述"   >
+          <a href="#概述" class="heading-link"><i class="fas fa-link"></i></a><a href="#概述" class="headerlink" title="概述"></a>概述</h3>
+      <p>集群、节点、索引、类型、文档、分片、映射是什么？</p>
+<p>1.索引</p>
+<p>2.字段类型（mapping）</p>
+<p>3.文档</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901153524585.png" alt="image-20210901153524585"></p>
+<p>一切皆是json</p>
+
+        <h3 id="物理设计"   >
+          <a href="#物理设计" class="heading-link"><i class="fas fa-link"></i></a><a href="#物理设计" class="headerlink" title="物理设计"></a><strong>物理设计</strong></h3>
+      <p>elasticsearch在后台把每个索引划分成多个分片，每片分片可以在集群的不同服务器间迁移</p>
+
+        <h3 id="文档"   >
+          <a href="#文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#文档" class="headerlink" title="文档"></a><strong>文档</strong></h3>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901153930053.png" alt="image-20210901153930053"></p>
+
+        <h3 id="类型"   >
+          <a href="#类型" class="heading-link"><i class="fas fa-link"></i></a><a href="#类型" class="headerlink" title="类型"></a><strong>类型</strong></h3>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901154117970.png" alt="image-20210901154117970"></p>
+
+        <h3 id="索引"   >
+          <a href="#索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#索引" class="headerlink" title="索引"></a><strong>索引</strong></h3>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901154218434.png" alt="image-20210901154218434"></p>
+
+        <h3 id="倒排索引"   >
+          <a href="#倒排索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3>
+      <p>elasticsearch使用一种成为倒排索引的结构，采用Lucene倒排索引作为底层。这种结构适用于快速的全文搜索，一个索引由文档中所有不重复的列表构成，对于每一个词，都有一个包含它的文档列表。</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20211216142159148.png" alt="image-20211216142159148"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20211216142414601.png" alt="image-20211216142414601"></p>
+
+        <h2 id="IK分词器插件"   >
+          <a href="#IK分词器插件" class="heading-link"><i class="fas fa-link"></i></a><a href="#IK分词器插件" class="headerlink" title="IK分词器插件"></a>IK分词器插件</h2>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901155109102.png" alt="image-20210901155109102"></p>
+<p>如果plugins目录下没有 建议去下载并解压 我这里是默认就有一个ik插件的</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901155350770.png" alt="image-20210901155350770"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901155456552.png" alt="image-20210901155456552"></p>
+<p>最少切分 ik_smart</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160121662.png" alt="image-20210901160121662"></p>
+<p>最细粒度划分 ik_max_word 穷尽词库的可能！</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160150802.png" alt="image-20210901160150802"></p>
+<p><strong>这里你会有疑问 他是按照什么依据来判定是否构成一个词？存在字典 应该可以改 可以把自己的词加到字典中</strong></p>
+<p>如果是自己自定义添加的ik 好像有 我这个默认就有的 没看到配置文件</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160714138.png" alt="image-20210901160714138"></p>
+<p>自定义 需要创建.dic文件</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901160938676.png" alt="image-20210901160938676"></p>
+<p>然后在配置文件中添加你刚才建的dic</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210901161254920.png" alt="image-20210901161254920"></p>
+
+        <h2 id="RESTful风格以及使用"   >
+          <a href="#RESTful风格以及使用" class="heading-link"><i class="fas fa-link"></i></a><a href="#RESTful风格以及使用" class="headerlink" title="RESTful风格以及使用"></a>RESTful风格以及使用</h2>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902105301874.png" alt="image-20210902105301874"></p>
+
+        <h2 id="关于索引的基本操作"   >
+          <a href="#关于索引的基本操作" class="heading-link"><i class="fas fa-link"></i></a><a href="#关于索引的基本操作" class="headerlink" title="关于索引的基本操作"></a>关于索引的基本操作</h2>
+      
+        <h4 id="创建一个索引"   >
+          <a href="#创建一个索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#创建一个索引" class="headerlink" title="创建一个索引"></a>创建一个索引</h4>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT /索引名/类型名/文档id</span><br><span class="line">&#123;</span><br><span class="line">	请求体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902110339025.png" alt="image-20210902110339025"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902110402345.png" alt="image-20210902110402345"></p>
+
+        <h4 id="类型-1"   >
+          <a href="#类型-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#类型-1" class="headerlink" title="类型"></a>类型</h4>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902110528324.png" alt="image-20210902110528324"></p>
+
+        <h4 id="Field-datatypes（官方对类型及类型映射的解释）"   >
+          <a href="#Field-datatypes（官方对类型及类型映射的解释）" class="heading-link"><i class="fas fa-link"></i></a><a href="#Field-datatypes（官方对类型及类型映射的解释）" class="headerlink" title="Field datatypes（官方对类型及类型映射的解释）"></a>Field datatypes（官方对类型及类型映射的解释）</h4>
+      <p>Each field has a data <code>type</code> which can be:</p>
+<ul>
+<li>a simple type like <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/text.html"><code>text</code></a>, <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/keyword.html"><code>keyword</code></a>, <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/date.html"><code>date</code></a>, <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/number.html"><code>long</code></a>, <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/number.html"><code>double</code></a>, <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/boolean.html"><code>boolean</code></a> or <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/ip.html"><code>ip</code></a>.</li>
+<li>a type which supports the hierarchical nature of JSON such as <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/object.html"><code>object</code></a> or <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/nested.html"><code>nested</code></a>.</li>
+<li>or a specialised type like <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/geo-point.html"><code>geo_point</code></a>, <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/geo-shape.html"><code>geo_shape</code></a>, or <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/search-suggesters-completion.html"><code>completion</code></a>.</li>
+</ul>
+<p>It is often useful to index the same field in different ways for different purposes. For instance, a <code>string</code> field could be <span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/mapping-index.html" >indexed</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> as a <code>text</code> field for full-text search, and as a <code>keyword</code> field for sorting or aggregations. Alternatively, you could index a string field with the <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/analysis-standard-analyzer.html"><code>standard</code> analyzer</a>, the <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/analysis-lang-analyzer.html#english-analyzer"><code>english</code></a> analyzer, and the <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/analysis-lang-analyzer.html#french-analyzer"><code>french</code> analyzer</a>.</p>
+<p>This is the purpose of <em>multi-fields</em>. Most datatypes support multi-fields via the <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.0/multi-fields.html"><code>fields</code></a> parameter.</p>
+
+        <h4 id="指定字段类型"   >
+          <a href="#指定字段类型" class="heading-link"><i class="fas fa-link"></i></a><a href="#指定字段类型" class="headerlink" title="指定字段类型"></a>指定字段类型</h4>
+      <p>A mapping could be specified when creating an index, as follows:</p>
+<figure class="highlight console"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index </span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;doc&quot;: &#123; </span><br><span class="line">      &quot;properties&quot;: &#123; </span><br><span class="line">        &quot;title&quot;:    &#123; &quot;type&quot;: &quot;text&quot;  &#125;, </span><br><span class="line">        &quot;name&quot;:     &#123; &quot;type&quot;: &quot;text&quot;  &#125;, </span><br><span class="line">        &quot;age&quot;:      &#123; &quot;type&quot;: &quot;integer&quot; &#125;,  </span><br><span class="line">        &quot;created&quot;:  &#123;</span><br><span class="line">          &quot;type&quot;:   &quot;date&quot;, </span><br><span class="line">          &quot;format&quot;: &quot;strict_date_optional_time||epoch_millis&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902111241544.png" alt="image-20210902111241544"></p>
+<p>这里就是创建映射规则，也就是说如果以后由name的值就是text类型</p>
+
+        <h4 id="使用默认类型-doc"   >
+          <a href="#使用默认类型-doc" class="heading-link"><i class="fas fa-link"></i></a><a href="#使用默认类型-doc" class="headerlink" title="使用默认类型 _doc"></a>使用默认类型 _doc</h4>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PUT /test3/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;我无敌&quot;,</span><br><span class="line">  &quot;age&quot;: 13,</span><br><span class="line">  &quot;birth&quot;: &quot;1998-09-17&quot;</span><br><span class="line">&#125;//这里_doc就是指定默认类型</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902112117729.png" alt="image-20210902112117729"></p>
+
+        <h4 id="修改"   >
+          <a href="#修改" class="heading-link"><i class="fas fa-link"></i></a><a href="#修改" class="headerlink" title="修改"></a>修改</h4>
+      <p>曾经</p>
+<p>PUT 版本号增加</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902112718238.png" alt="image-20210902112718238"></p>
+<p>现在</p>
+<p>PUT</p>
+<p>POST </p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902113308183.png" alt="image-20210902113308183"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902113329930.png" alt="image-20210902113329930"></p>
+
+        <h4 id="删除索引"   >
+          <a href="#删除索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE</span><br></pre></td></tr></table></div></figure>
+
+<p>如果要删除文档就用RESTful风格请求来删除即可</p>
+
+        <h2 id="一些命令之类的吧"   >
+          <a href="#一些命令之类的吧" class="heading-link"><i class="fas fa-link"></i></a><a href="#一些命令之类的吧" class="headerlink" title="一些命令之类的吧"></a>一些命令之类的吧</h2>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET _cat/health //查看健康情况</span><br><span class="line"></span><br><span class="line">GET _cat/indices?v //查看索引信息</span><br><span class="line"></span><br><span class="line">等等</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="关于文档的基本操作"   >
+          <a href="#关于文档的基本操作" class="heading-link"><i class="fas fa-link"></i></a><a href="#关于文档的基本操作" class="headerlink" title="关于文档的基本操作"></a>关于文档的基本操作</h2>
+      
+        <h3 id="基本操作"   >
+          <a href="#基本操作" class="heading-link"><i class="fas fa-link"></i></a><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3>
+      
+        <h4 id="添加数据"   >
+          <a href="#添加数据" class="heading-link"><i class="fas fa-link"></i></a><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h4>
+      <p>PUT</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902150701139.png" alt="image-20210902150701139"></p>
+
+        <h4 id="获取数据"   >
+          <a href="#获取数据" class="heading-link"><i class="fas fa-link"></i></a><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h4>
+      <p>GET</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902150807827.png" alt="image-20210902150807827"></p>
+
+        <h4 id="更新数据"   >
+          <a href="#更新数据" class="heading-link"><i class="fas fa-link"></i></a><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h4>
+      <p>PUT</p>
+<p>区别一个需要全部重新赋值 如果只是改一个值就不方便</p>
+<p>POST</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902151058613.png" alt="image-20210902151058613"></p>
+
+        <h4 id="简单的搜索"   >
+          <a href="#简单的搜索" class="heading-link"><i class="fas fa-link"></i></a><a href="#简单的搜索" class="headerlink" title="简单的搜索"></a>简单的搜索</h4>
+      <p>GET</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902151355320.png" alt="image-20210902151355320"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902151839877.png" alt="image-20210902151839877"></p>
+<p>这个score 分数越高匹配度越高</p>
+
+        <h4 id="复杂的查询-（排序-分页-高亮-模糊查询）"   >
+          <a href="#复杂的查询-（排序-分页-高亮-模糊查询）" class="heading-link"><i class="fas fa-link"></i></a><a href="#复杂的查询-（排序-分页-高亮-模糊查询）" class="headerlink" title="复杂的查询 （排序 分页 高亮 模糊查询）"></a>复杂的查询 （排序 分页 高亮 模糊查询）</h4>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902152036305.png" alt="image-20210902152036305"></p>
+<p>Hits这个在java中会是个对象map</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902152444930.png" alt="image-20210902152444930"></p>
+<p><strong>这一个json格式都能在java中以map的形式体现出来</strong></p>
+
+        <h5 id="source-结果过滤"   >
+          <a href="#source-结果过滤" class="heading-link"><i class="fas fa-link"></i></a><a href="#source-结果过滤" class="headerlink" title="_source 结果过滤"></a>_source 结果过滤</h5>
+      <p>这里如果只想要查出来显示想要的字段 （这里体现只要name和desc而不要age）</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902152845363.png" alt="image-20210902152845363"></p>
+
+        <h5 id="排序"   >
+          <a href="#排序" class="heading-link"><i class="fas fa-link"></i></a><a href="#排序" class="headerlink" title="排序"></a>排序</h5>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902153106388.png" alt="image-20210902153106388"></p>
+
+        <h5 id="分页"   >
+          <a href="#分页" class="heading-link"><i class="fas fa-link"></i></a><a href="#分页" class="headerlink" title="分页"></a>分页</h5>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902153242340.png" alt="image-20210902153242340"></p>
+
+        <h5 id="bool-布尔值条件查询"   >
+          <a href="#bool-布尔值条件查询" class="heading-link"><i class="fas fa-link"></i></a><a href="#bool-布尔值条件查询" class="headerlink" title="bool 布尔值条件查询"></a>bool 布尔值条件查询</h5>
+      <p>这里用到了must（and)</p>
+<p>还有should（or）</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902153715766.png" alt="image-20210902153715766"></p>
+<p>还存在非</p>
+<p>must_not</p>
+
+        <h5 id="过滤"   >
+          <a href="#过滤" class="heading-link"><i class="fas fa-link"></i></a><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h5>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154224098.png" alt="image-20210902154224098"></p>
+<p>这里 range 范围 </p>
+<p>age范围</p>
+<p>gt 表示大于</p>
+<p>gte 表示大于等于</p>
+<p>lt 表示小于</p>
+<p>lte表示小于等于</p>
+
+        <h5 id="匹配多个条件"   >
+          <a href="#匹配多个条件" class="heading-link"><i class="fas fa-link"></i></a><a href="#匹配多个条件" class="headerlink" title="匹配多个条件"></a>匹配多个条件</h5>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154615839.png" alt="image-20210902154615839"></p>
+
+        <h5 id="精确查询"   >
+          <a href="#精确查询" class="heading-link"><i class="fas fa-link"></i></a><a href="#精确查询" class="headerlink" title="精确查询"></a>精确查询</h5>
+      <p>trem查询是直接通过倒排索引指定的词条进行精确的查询</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154908396.png" alt="image-20210902154908396"></p>
+<p>match 会使用分词器</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902154923978.png" alt="image-20210902154923978"></p>
+
+        <h5 id="两个类型-text-keyword"   >
+          <a href="#两个类型-text-keyword" class="heading-link"><i class="fas fa-link"></i></a><a href="#两个类型-text-keyword" class="headerlink" title="两个类型 text,keyword"></a>两个类型 text,keyword</h5>
+      <p>这里理解 就是keyword不存在分词 无法被拆分，</p>
+<p>在检索的时候 如果条件属性的类型是keyword 就无法进行模糊查询</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902160231604.png" alt="image-20210902160231604"></p>
+
+        <h5 id="高亮查询"   >
+          <a href="#高亮查询" class="heading-link"><i class="fas fa-link"></i></a><a href="#高亮查询" class="headerlink" title="高亮查询"></a>高亮查询</h5>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902160917322.png" alt="image-20210902160917322"></p>
+<p>还可以自定义高亮样式</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210902161138654.png" alt="image-20210902161138654"></p>
+
+        <h2 id="SpringBoot集成"   >
+          <a href="#SpringBoot集成" class="heading-link"><i class="fas fa-link"></i></a><a href="#SpringBoot集成" class="headerlink" title="SpringBoot集成"></a>SpringBoot集成</h2>
+      <p>首先看官方文档啦</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903101255730.png" alt="image-20210903101255730"></p>
+<p><strong>这里需要保证导入的依赖和es版本一致 因为由于SpringBoot版本问题会导致默认导入的es的版本和你下的es的版本不同</strong></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903103023404.png" alt="image-20210903103023404"></p>
+<p>卧槽这里怎么实现的。。。</p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//先注入吧</span><br><span class="line">@Configuration</span><br><span class="line">public class ElasticSearchClientConfig &#123;</span><br><span class="line">    @Bean</span><br><span class="line">    public RestHighLevelClient setRestClient()&#123;</span><br><span class="line">        RestHighLevelClient client = new RestHighLevelClient(</span><br><span class="line">                RestClient.builder(</span><br><span class="line">                        new HttpHost(&quot;127.0.0.1&quot;, 9200, &quot;http&quot;)));</span><br><span class="line"></span><br><span class="line">        return client;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>源码部分 一言难尽 版本差了一点 源码分布就天差地别…</p>
+<p>不过还是老套路 </p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903105926215.png" alt="image-20210903105926215"></p>
+<p>这下面去找罢了</p>
+
+        <h3 id="创建索引"   >
+          <a href="#创建索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void contextLoads() throws IOException &#123;</span><br><span class="line">    //索引创建请求</span><br><span class="line">    CreateIndexRequest request = new CreateIndexRequest(&quot;kuang_index&quot;);</span><br><span class="line">    //执行请求</span><br><span class="line">    CreateIndexResponse response = client.indices().create(request, RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903110606796.png" alt="image-20210903110606796"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903110625586.png" alt="image-20210903110625586"></p>
+<p>成功创建索引</p>
+
+        <h3 id="获取以及判断索引"   >
+          <a href="#获取以及判断索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#获取以及判断索引" class="headerlink" title="获取以及判断索引"></a>获取以及判断索引</h3>
+      <p>先判断索引是否存在</p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void getExistIndex() throws IOException &#123;</span><br><span class="line"></span><br><span class="line">    GetIndexRequest request = new GetIndexRequest(&quot;kuang_index&quot;);</span><br><span class="line">    boolean b = client.indices().exists(request,RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void getExistIndex() throws IOException &#123;</span><br><span class="line"></span><br><span class="line">    GetIndexRequest request = new GetIndexRequest(&quot;kuang_index&quot;);</span><br><span class="line">    boolean b = client.indices().exists(request,RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(b);</span><br><span class="line">    if(b == true)&#123;</span><br><span class="line">        GetIndexResponse response = client.indices().get(request,RequestOptions.DEFAULT);</span><br><span class="line">        System.out.println(response);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        System.out.println(&quot;索引存在&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+        <h3 id="删除索引-1"   >
+          <a href="#删除索引-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#删除索引-1" class="headerlink" title="删除索引"></a>删除索引</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void deleteExistIndex() throws IOException&#123;</span><br><span class="line">    DeleteIndexRequest request = new DeleteIndexRequest(&quot;kuang_index&quot;);</span><br><span class="line">    AcknowledgedResponse response = client.indices().delete(request,RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+        <h3 id="添加文档"   >
+          <a href="#添加文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#添加文档" class="headerlink" title="添加文档"></a>添加文档</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//测试添加文档</span><br><span class="line">@Test</span><br><span class="line">void testAddDocument() throws IOException &#123;</span><br><span class="line">    //创建对象</span><br><span class="line">    User user = new User(&quot;张三&quot;,3,&quot;法外狂徒&quot;);</span><br><span class="line">    //创建请求</span><br><span class="line">    IndexRequest request = new IndexRequest(&quot;kuang_index&quot;);</span><br><span class="line">    //规则 PUT /kuang_index/_doc/1</span><br><span class="line">    request.id(&quot;1&quot;);</span><br><span class="line">    request.timeout(TimeValue.timeValueSeconds(1));</span><br><span class="line">    request.source(JSON.toJSONString(user), XContentType.JSON);</span><br><span class="line"></span><br><span class="line">    //客户端发送请求</span><br><span class="line">    IndexResponse response =  client.index(request,RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(response.toString());</span><br><span class="line">    System.out.println(response.status());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903113515670.png" alt="image-20210903113515670"></p>
+
+        <h3 id="获取文档"   >
+          <a href="#获取文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#获取文档" class="headerlink" title="获取文档"></a>获取文档</h3>
+      <p>这里有个对照</p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void testGetDocument() throws IOException &#123;</span><br><span class="line">    GetRequest request = new GetRequest(&quot;kuang_index&quot;,&quot;1&quot;);</span><br><span class="line">    //不获取返回的_source的上下文</span><br><span class="line">    request.fetchSourceContext(new FetchSourceContext(false));</span><br><span class="line">    request.storedFields(&quot;_none_&quot;);</span><br><span class="line">    if(client.exists(request,RequestOptions.DEFAULT))&#123;</span><br><span class="line">        GetResponse response = client.get(request,RequestOptions.DEFAULT);</span><br><span class="line">        System.out.println(response.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903114320162.png" alt="image-20210903114320162"></p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   @Test</span><br><span class="line">    void testGetDocument() throws IOException &#123;</span><br><span class="line">        GetRequest request = new GetRequest(&quot;kuang_index&quot;,&quot;1&quot;);</span><br><span class="line">        //不获取返回的_source的上下文</span><br><span class="line">//        request.fetchSourceContext(new FetchSourceContext(false));</span><br><span class="line">//        request.storedFields(&quot;_none_&quot;);</span><br><span class="line">        if(client.exists(request,RequestOptions.DEFAULT))&#123;</span><br><span class="line">            GetResponse response = client.get(request,RequestOptions.DEFAULT);</span><br><span class="line">            System.out.println(response.toString());</span><br><span class="line">            System.out.println(response.getSource());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903114509427.png" alt="image-20210903114509427"></p>
+
+        <h3 id="更新文档"   >
+          <a href="#更新文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void updateDocument() throws IOException &#123;</span><br><span class="line">    UpdateRequest request = new UpdateRequest(&quot;kuang_index&quot;,&quot;1&quot;);</span><br><span class="line">    User user = new User(&quot;狂神说java&quot;,12,&quot;我无敌&quot;);</span><br><span class="line">    request.doc(JSON.toJSONString(user),XContentType.JSON);</span><br><span class="line"></span><br><span class="line">    UpdateResponse response = client.update(request,RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(response.status());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+
+
+        <h3 id="删除文档"   >
+          <a href="#删除文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void deleteDocument() throws IOException&#123;</span><br><span class="line">    DeleteRequest request = new DeleteRequest(&quot;kuang_index&quot;,&quot;1&quot;);</span><br><span class="line">    DeleteResponse response = client.delete(request,RequestOptions.DEFAULT);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+
+
+        <h3 id="批量操作文档"   >
+          <a href="#批量操作文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#批量操作文档" class="headerlink" title="批量操作文档"></a>批量操作文档</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 批量添加文档</span><br><span class="line"> */</span><br><span class="line">@Test</span><br><span class="line">void testBulkRequest() throws IOException &#123;</span><br><span class="line">    BulkRequest request = new BulkRequest();</span><br><span class="line">    request.timeout(&quot;10s&quot;);</span><br><span class="line"></span><br><span class="line">    ArrayList&lt;User&gt; users = new ArrayList&lt;&gt;();</span><br><span class="line">    users.add(new User(&quot;王一&quot;,10,&quot;测试&quot;));</span><br><span class="line">    users.add(new User(&quot;王二&quot;,9,&quot;测试&quot;));</span><br><span class="line">    users.add(new User(&quot;王三&quot;,11,&quot;测试&quot;));</span><br><span class="line">    users.add(new User(&quot;王四&quot;,7,&quot;测试&quot;));</span><br><span class="line">    users.add(new User(&quot;王五&quot;,15,&quot;测试&quot;));</span><br><span class="line">    //这里是添加</span><br><span class="line">    for(int i = 0 ; i &lt; users.size() ; i++)&#123;</span><br><span class="line">        request.add(new IndexRequest(&quot;kuang_index&quot;).id(&quot;&quot; + (i+1)).source(JSON.toJSONString(users.get(i)),XContentType.JSON));</span><br><span class="line">    &#125;</span><br><span class="line">    //        //批量更新</span><br><span class="line">	//        request.add(new UpdateRequest(&quot;kuang_index&quot;,&quot;1&quot;).doc(&quot;&quot;));</span><br><span class="line">	//        //批量删除</span><br><span class="line">	//        request.add(new DeleteRequest());</span><br><span class="line">    BulkResponse response = client.bulk(request,RequestOptions.DEFAULT);</span><br><span class="line">    System.out.println(response.status());</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+        <h3 id="搜索"   >
+          <a href="#搜索" class="heading-link"><i class="fas fa-link"></i></a><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3>
+      <p><strong>这里提示 term和match查询 一个是精确匹配 也就是说不会拆分词 而match会拆 例如 无敌先生 term就只找无敌先生这一个连贯的词 而·match则会拆分为</strong></p>
+<p><strong>无敌 &#x2F; 先生 两个词来进行匹配</strong></p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void testSearch() throws IOException&#123;</span><br><span class="line">    SearchRequest request = new SearchRequest(&quot;kuang_index&quot;);</span><br><span class="line">    //构建查询条件</span><br><span class="line">    SearchSourceBuilder builder = new SearchSourceBuilder();</span><br><span class="line"></span><br><span class="line">    //构建高亮</span><br><span class="line">    builder.highlighter();</span><br><span class="line"></span><br><span class="line">    //设置查询条件（这里用的是QueryBuilders 快速创建一个精确查询）</span><br><span class="line">    TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery(&quot;age&quot;,&quot;7&quot;);</span><br><span class="line">	//        QueryBuilders.matchQuery();</span><br><span class="line">	//        QueryBuilders.matchAllQuery();</span><br><span class="line"></span><br><span class="line">    builder.query(termQueryBuilder);</span><br><span class="line"></span><br><span class="line">    request.source(builder);</span><br><span class="line"></span><br><span class="line">    SearchResponse response = client.search(request,RequestOptions.DEFAULT);</span><br><span class="line"></span><br><span class="line">    System.out.println(response.getHits());</span><br><span class="line"></span><br><span class="line">    //这里你会发现如果有中文就没有结果 这里我换成age试了一下才有结果</span><br><span class="line">    for(SearchHit documentFields : response.getHits().getHits())&#123;</span><br><span class="line">        System.out.println(documentFields.getSourceAsString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+        <h2 id="实战"   >
+          <a href="#实战" class="heading-link"><i class="fas fa-link"></i></a><a href="#实战" class="headerlink" title="实战"></a>实战</h2>
+      
+        <h3 id="创建项目"   >
+          <a href="#创建项目" class="heading-link"><i class="fas fa-link"></i></a><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3>
+      <p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903142650016.png" alt="image-20210903142650016"></p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903142704362.png" alt="image-20210903142704362"></p>
+
+        <h3 id="爬虫"   >
+          <a href="#爬虫" class="heading-link"><i class="fas fa-link"></i></a><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h3>
+      <p>爬取数据：（获取请求返回的页面信息，筛选出数据）</p>
+<p>这里使用的是java中的 jsoup</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20210903151124368.png" alt="image-20210903151124368"></p>
+<p>这里再获取图片时 有点小问题 怎么说呢 这里图片采用了延迟加载 而真正存储图片的路径是data-lazy-img</p>
+<p><img src="C:%5CUsers%5Cwcy%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210903152232054.png" alt="image-20210903152232054"></p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">void contextLoads() throws IOException &#123;</span><br><span class="line">    String url = &quot;https://search.jd.com/Search?keyword=java&quot;;</span><br><span class="line">    //解析网页(Jsoup 返回Document就是浏览器Document对象)</span><br><span class="line">    Document document = Jsoup.parse(new URL(url),30000);</span><br><span class="line">    Element element = document.getElementById(&quot;J_goodsList&quot;);</span><br><span class="line">    System.out.println(element.html());</span><br><span class="line">    //获取所有li标签</span><br><span class="line">    Elements elements = element.getElementsByTag(&quot;li&quot;);</span><br><span class="line">    for(Element el : elements)&#123;</span><br><span class="line">        //这里图片一开始没有 因为有个懒加载机制 （延迟加载）</span><br><span class="line">        String img = el.getElementsByTag(&quot;img&quot;).eq(0).attr(&quot;data-lazy-img&quot;);</span><br><span class="line">        String price = el.getElementsByClass(&quot;p-price&quot;).eq(0).text();</span><br><span class="line">        String title = el.getElementsByClass(&quot;p-name&quot;).eq(0).text();</span><br><span class="line">        System.out.println(&quot;========================&quot;);</span><br><span class="line">        System.out.println(img);</span><br><span class="line">        System.out.println(price);</span><br><span class="line">        System.out.println(title);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+<p>然后对其进行封装成一个方法</p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public static List&lt;Content&gt; parseJD(String keyword) throws IOException &#123;</span><br><span class="line">    String url = &quot;https://search.jd.com/Search?keyword=&quot; + keyword;</span><br><span class="line">    //解析网页(Jsoup 返回Document就是浏览器Document对象)</span><br><span class="line">    Document document = Jsoup.parse(new URL(url),30000);</span><br><span class="line">    Element element = document.getElementById(&quot;J_goodsList&quot;);</span><br><span class="line">    //获取所有li标签</span><br><span class="line">    Elements elements = element.getElementsByTag(&quot;li&quot;);</span><br><span class="line">    List&lt;Content&gt; contents = new ArrayList&lt;Content&gt;();</span><br><span class="line"></span><br><span class="line">    for(Element el : elements)&#123;</span><br><span class="line">        //这里图片一开始没有 因为有个懒加载机制 （延迟加载）</span><br><span class="line">        String img = el.getElementsByTag(&quot;img&quot;).eq(0).attr(&quot;data-lazy-img&quot;);</span><br><span class="line">        String price = el.getElementsByClass(&quot;p-price&quot;).eq(0).text();</span><br><span class="line">        String title = el.getElementsByClass(&quot;p-name&quot;).eq(0).text();</span><br><span class="line">        contents.add(new Content(title,img,price));</span><br><span class="line">    &#125;</span><br><span class="line">    return contents;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+<p>然后就是具体的封装了</p>
+<p>这里贴一些主要的代码</p>
+<figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">@Service</span><br><span class="line">public class ContentService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    RestHighLevelClient restHighLevelClient;</span><br><span class="line">    //获取并解析数据 然后添加到es中</span><br><span class="line">    public Boolean parseContent(String keyword) throws IOException &#123;</span><br><span class="line">        List&lt;Content&gt; contentList = HtmlParseUtil.parseJD(keyword);</span><br><span class="line"></span><br><span class="line">        //将数据放入es中</span><br><span class="line">        BulkRequest request = new BulkRequest(&quot;jd_goods&quot;);</span><br><span class="line">        request.timeout(&quot;2m&quot;);</span><br><span class="line">        for(int i = 0 ; i &lt; contentList.size() ; i++)&#123;</span><br><span class="line">            request.add(new IndexRequest().source(JSON.toJSONString(contentList.get(i)), XContentType.JSON));</span><br><span class="line">        &#125;</span><br><span class="line">        BulkResponse response = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);</span><br><span class="line">        return !response.hasFailures();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //从es中获取数据 实现搜索</span><br><span class="line">    public List&lt;Map&lt;String,Object&gt;&gt; searchPage(String keyword,int pageNo,int pageSize) throws IOException &#123;</span><br><span class="line">        if(pageNo &lt;= 1)&#123;</span><br><span class="line">            pageNo = 1;</span><br><span class="line">        &#125;</span><br><span class="line">        SearchRequest searchRequest = new SearchRequest(&quot;jd_goods&quot;);</span><br><span class="line">        SearchSourceBuilder builder = new SearchSourceBuilder();</span><br><span class="line">        </span><br><span class="line">        //实现高亮</span><br><span class="line">        HighlightBuilder highlightBuilder = new HighlightBuilder();</span><br><span class="line">        //这里表示存在多个关键字时不需要都高亮显示</span><br><span class="line">        highlightBuilder.requireFieldMatch(false);</span><br><span class="line">        highlightBuilder.field(&quot;title&quot;);</span><br><span class="line">        highlightBuilder.preTags(&quot;&lt;span style=&#x27;color:red&#x27;&gt;&quot;);</span><br><span class="line">        highlightBuilder.postTags(&quot;&lt;/span&gt;&quot;);</span><br><span class="line">        builder.highlighter(highlightBuilder);</span><br><span class="line">        </span><br><span class="line">        //分页</span><br><span class="line">       	builder.from(pageNo);</span><br><span class="line">       	builder.size(pageSize);</span><br><span class="line"></span><br><span class="line">        //精确匹配</span><br><span class="line">        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery(&quot;title&quot;,keyword);</span><br><span class="line">        builder.query(termQueryBuilder);</span><br><span class="line"></span><br><span class="line">        //执行搜索</span><br><span class="line">        searchRequest.source(builder);</span><br><span class="line">        SearchResponse response = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);</span><br><span class="line"></span><br><span class="line">        List&lt;Map&lt;String,Object&gt;&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">        //解析搜索结果</span><br><span class="line">        for(SearchHit documentFields : response.getHits().getHits())&#123;</span><br><span class="line">            //普通</span><br><span class="line">//            list.add(documentFields.getSourceAsMap());</span><br><span class="line">            //高亮</span><br><span class="line">            Map&lt;String, HighlightField&gt; highlightFieldMap = documentFields.getHighlightFields();</span><br><span class="line">            HighlightField title = highlightFieldMap.get(&quot;title&quot;);</span><br><span class="line">            System.out.println(title);</span><br><span class="line">            Map&lt;String,Object&gt; sourceAsMap = documentFields.getSourceAsMap();//原来的结果</span><br><span class="line">            //使用高亮来替换</span><br><span class="line">            if(title != null)&#123;</span><br><span class="line"></span><br><span class="line">                Text[] fragments = title.fragments();</span><br><span class="line">                String n_title = &quot;&quot;;</span><br><span class="line">                for(Text text : fragments)&#123;</span><br><span class="line">                    n_title += text;</span><br><span class="line">                &#125;</span><br><span class="line">                sourceAsMap.put(&quot;title&quot;,n_title);</span><br><span class="line">            &#125;</span><br><span class="line">            list.add(sourceAsMap);</span><br><span class="line">        &#125;</span><br><span class="line">        return list;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+
+
+
+
+
+
+        <h1 id="谷粒商城篇补充与应用学习"   >
+          <a href="#谷粒商城篇补充与应用学习" class="heading-link"><i class="fas fa-link"></i></a><a href="#谷粒商城篇补充与应用学习" class="headerlink" title="谷粒商城篇补充与应用学习"></a>谷粒商城篇补充与应用学习</h1>
+      
+        <h2 id="1-基本概念"   >
+          <a href="#1-基本概念" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2>
+      
+        <h3 id="1）-索引"   >
+          <a href="#1）-索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#1）-索引" class="headerlink" title="1）.索引"></a>1）.索引</h3>
+      <p>​        动词解释：相当于MySQL中的insert</p>
+<p>​        名词解释：相当于MySQL的数据库（database）</p>
+
+        <h3 id="2）-类型"   >
+          <a href="#2）-类型" class="heading-link"><i class="fas fa-link"></i></a><a href="#2）-类型" class="headerlink" title="2）.类型"></a>2）.类型</h3>
+      <p>​        在index(索引)中，可以定义一个或多个类型。</p>
+<p>​        类似于MySQL中的表（table）；</p>
+<p>​        （这里结合之前狂神说的理解，简单理解为一种表结构的制定，有点这个意思，虽然说es的字段的类型可以不用确认，但如果能先构造结构也是好的，就如MySQL的建表一样。）</p>
+<p>​        </p>
+
+        <h3 id="3）-文档"   >
+          <a href="#3）-文档" class="heading-link"><i class="fas fa-link"></i></a><a href="#3）-文档" class="headerlink" title="3）.文档"></a>3）.文档</h3>
+      <p>​            保存在某个索引下，某种类型的一个数据，文档是<strong>JSON格式</strong>的，Document就像是MySQL中某个表中的数据</p>
+<p>​            （简单解释就是一条条具体的记录、数据）</p>
+
+        <h3 id="4）-倒排索引"   >
+          <a href="#4）-倒排索引" class="heading-link"><i class="fas fa-link"></i></a><a href="#4）-倒排索引" class="headerlink" title="4）.倒排索引"></a>4）.倒排索引</h3>
+      <p>​            说白了就是额外维护一张文档列表存储 一种关系吧，里面的数据能够说明检索的词存在于哪些文档，这样可以过滤掉一些非必要的检索操作</p>
+<p>​        <img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/image-20211216142836513.png" alt="image-20211216142836513"></p>
+<p>接下来请转战谷粒商城的笔记…</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://example.com">乄帝</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://example.com/2022/03/20/ElasticSearch(%E5%BA%93%E3%80%81%E8%A1%A8%E3%80%81%E8%AE%B0%E5%BD%95)%20-%20%E7%8B%82%E7%A5%9E%E7%AF%87%E5%85%A5%E9%97%A8/">http://example.com/2022/03/20/ElasticSearch(%E5%BA%93%E3%80%81%E8%A1%A8%E3%80%81%E8%AE%B0%E5%BD%95)%20-%20%E7%8B%82%E7%A5%9E%E7%AF%87%E5%85%A5%E9%97%A8/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://example.com/tags/ElasticSearch/">ElasticSearch</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2022/03/27/Spring/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">Spring</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2022/03/19/JVM%E8%B0%83%E4%BC%98%E5%8F%82%E6%95%B0/"><span class="paginator-prev__text">JVM调优参数</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ElasticSearch-%E5%BA%93%E3%80%81%E8%A1%A8%E3%80%81%E8%AE%B0%E5%BD%95-%E5%85%A5%E9%97%A8"><span class="toc-number">1.</span> <span class="toc-text">
+          ElasticSearch(库、表、记录) - 入门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B2%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">
+          讲什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Doug-Cutting%EF%BC%88%E8%BF%99%E4%B8%AA%E4%BA%BA%E4%B9%9F%E6%90%9E%E4%BA%86Hadoop%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">
+          Doug Cutting（这个人也搞了Hadoop）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ElasticSearch%E6%A6%82%E8%BF%B0"><span class="toc-number">1.3.</span> <span class="toc-text">
+          ElasticSearch概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ElasticSearch%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.</span> <span class="toc-text">
+          ElasticSearch安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%86%9F%E6%82%89%E7%9B%AE%E5%BD%95"><span class="toc-number">1.4.1.</span> <span class="toc-text">
+          熟悉目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text">
+          启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kibana%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="toc-number">1.5.</span> <span class="toc-text">
+          kibana下载安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.6.</span> <span class="toc-text">
+          ES核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.6.1.</span> <span class="toc-text">
+          概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.6.2.</span> <span class="toc-text">
+          物理设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3"><span class="toc-number">1.6.3.</span> <span class="toc-text">
+          文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.6.4.</span> <span class="toc-text">
+          类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-number">1.6.5.</span> <span class="toc-text">
+          索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95"><span class="toc-number">1.6.6.</span> <span class="toc-text">
+          倒排索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IK%E5%88%86%E8%AF%8D%E5%99%A8%E6%8F%92%E4%BB%B6"><span class="toc-number">1.7.</span> <span class="toc-text">
+          IK分词器插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RESTful%E9%A3%8E%E6%A0%BC%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="toc-number">1.8.</span> <span class="toc-text">
+          RESTful风格以及使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%B4%A2%E5%BC%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.9.</span> <span class="toc-text">
+          关于索引的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%B4%A2%E5%BC%95"><span class="toc-number">1.9.0.1.</span> <span class="toc-text">
+          创建一个索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B-1"><span class="toc-number">1.9.0.2.</span> <span class="toc-text">
+          类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Field-datatypes%EF%BC%88%E5%AE%98%E6%96%B9%E5%AF%B9%E7%B1%BB%E5%9E%8B%E5%8F%8A%E7%B1%BB%E5%9E%8B%E6%98%A0%E5%B0%84%E7%9A%84%E8%A7%A3%E9%87%8A%EF%BC%89"><span class="toc-number">1.9.0.3.</span> <span class="toc-text">
+          Field datatypes（官方对类型及类型映射的解释）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.9.0.4.</span> <span class="toc-text">
+          指定字段类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%BB%98%E8%AE%A4%E7%B1%BB%E5%9E%8B-doc"><span class="toc-number">1.9.0.5.</span> <span class="toc-text">
+          使用默认类型 _doc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9"><span class="toc-number">1.9.0.6.</span> <span class="toc-text">
+          修改</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95"><span class="toc-number">1.9.0.7.</span> <span class="toc-text">
+          删除索引</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%90%A7"><span class="toc-number">1.10.</span> <span class="toc-text">
+          一些命令之类的吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.11.</span> <span class="toc-text">
+          关于文档的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.11.1.</span> <span class="toc-text">
+          基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-number">1.11.1.1.</span> <span class="toc-text">
+          添加数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="toc-number">1.11.1.2.</span> <span class="toc-text">
+          获取数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="toc-number">1.11.1.3.</span> <span class="toc-text">
+          更新数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%90%9C%E7%B4%A2"><span class="toc-number">1.11.1.4.</span> <span class="toc-text">
+          简单的搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E7%9A%84%E6%9F%A5%E8%AF%A2-%EF%BC%88%E6%8E%92%E5%BA%8F-%E5%88%86%E9%A1%B5-%E9%AB%98%E4%BA%AE-%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%EF%BC%89"><span class="toc-number">1.11.1.5.</span> <span class="toc-text">
+          复杂的查询 （排序 分页 高亮 模糊查询）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#source-%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4"><span class="toc-number">1.11.1.5.1.</span> <span class="toc-text">
+          _source 结果过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">1.11.1.5.2.</span> <span class="toc-text">
+          排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%86%E9%A1%B5"><span class="toc-number">1.11.1.5.3.</span> <span class="toc-text">
+          分页</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#bool-%E5%B8%83%E5%B0%94%E5%80%BC%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.11.1.5.4.</span> <span class="toc-text">
+          bool 布尔值条件查询</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4"><span class="toc-number">1.11.1.5.5.</span> <span class="toc-text">
+          过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E5%A4%9A%E4%B8%AA%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.11.1.5.6.</span> <span class="toc-text">
+          匹配多个条件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.11.1.5.7.</span> <span class="toc-text">
+          精确查询</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E7%B1%BB%E5%9E%8B-text-keyword"><span class="toc-number">1.11.1.5.8.</span> <span class="toc-text">
+          两个类型 text,keyword</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%AB%98%E4%BA%AE%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.11.1.5.9.</span> <span class="toc-text">
+          高亮查询</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot%E9%9B%86%E6%88%90"><span class="toc-number">1.12.</span> <span class="toc-text">
+          SpringBoot集成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="toc-number">1.12.1.</span> <span class="toc-text">
+          创建索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%BB%A5%E5%8F%8A%E5%88%A4%E6%96%AD%E7%B4%A2%E5%BC%95"><span class="toc-number">1.12.2.</span> <span class="toc-text">
+          获取以及判断索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95-1"><span class="toc-number">1.12.3.</span> <span class="toc-text">
+          删除索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%96%87%E6%A1%A3"><span class="toc-number">1.12.4.</span> <span class="toc-text">
+          添加文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%96%87%E6%A1%A3"><span class="toc-number">1.12.5.</span> <span class="toc-text">
+          获取文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3"><span class="toc-number">1.12.6.</span> <span class="toc-text">
+          更新文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3"><span class="toc-number">1.12.7.</span> <span class="toc-text">
+          删除文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C%E6%96%87%E6%A1%A3"><span class="toc-number">1.12.8.</span> <span class="toc-text">
+          批量操作文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2"><span class="toc-number">1.12.9.</span> <span class="toc-text">
+          搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98"><span class="toc-number">1.13.</span> <span class="toc-text">
+          实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.13.1.</span> <span class="toc-text">
+          创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%88%AC%E8%99%AB"><span class="toc-number">1.13.2.</span> <span class="toc-text">
+          爬虫</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B0%B7%E7%B2%92%E5%95%86%E5%9F%8E%E7%AF%87%E8%A1%A5%E5%85%85%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AD%A6%E4%B9%A0"><span class="toc-number">2.</span> <span class="toc-text">
+          谷粒商城篇补充与应用学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">
+          1.基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%89-%E7%B4%A2%E5%BC%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">
+          1）.索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%89-%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.2.</span> <span class="toc-text">
+          2）.类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%EF%BC%89-%E6%96%87%E6%A1%A3"><span class="toc-number">2.1.3.</span> <span class="toc-text">
+          3）.文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%EF%BC%89-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95"><span class="toc-number">2.1.4.</span> <span class="toc-text">
+          4）.倒排索引</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/wallhaven-zxozdw_128x128.png" alt="avatar"></div><p class="sidebar-ov-author__text">山不在高有仙则名，水不在深有龙则灵</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/Tassdar2333" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://plus.google.com/" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-google"></i></span></a><a class="sidebar-ov-social-item" href="https://twitter.com/" target="_blank" rel="noopener" data-popover="Twitter" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-twitter"></i></span></a><a class="sidebar-ov-social-item" href="https://youtube.com/" target="_blank" rel="noopener" data-popover="Youtube" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-youtube"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">7</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">4</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">5</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><meting-js server="netease" type="playlist" fixed="true" id="7081604432"></meting-js><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>这里是我的博客</span></div><div>欢迎来到我的博客</div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>
