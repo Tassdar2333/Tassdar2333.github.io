@@ -1,0 +1,494 @@
+<!DOCTYPE html><html lang="zh-CN"><head><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Sanarous/files@1.151/js/clicklove.js"></script><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/favicon/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/favicon/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="关于IO的部分资料以及一些别人的理解，我觉得很实用，给人印象深刻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IO的理解和学习（未完善）">
+<meta property="og:url" content="http://example.com/2022/04/26/IO/index.html">
+<meta property="og:site_name" content="布小新的博客">
+<meta property="og:description" content="关于IO的部分资料以及一些别人的理解，我觉得很实用，给人印象深刻">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139303632343132323132363339382e6a7065673f782d6f73732d70726f636573733d696d6167652f77617465726d61726b2c747970655f5a6d46755a33706f5a57356e6147567064476.jpg">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/20190105163657587.png">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/20190105163801795.jpg">
+<meta property="og:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/20190105163821398.jpg">
+<meta property="og:image" content="c:/Users/wcy/Desktop/学习笔记/20190105163846560.jpg">
+<meta property="article:published_time" content="2022-04-26T12:01:00.000Z">
+<meta property="article:modified_time" content="2022-04-26T12:04:38.652Z">
+<meta property="article:author" content="乄帝">
+<meta property="article:tag" content="IO">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139303632343132323132363339382e6a7065673f782d6f73732d70726f636573733d696d6167652f77617465726d61726b2c747970655f5a6d46755a33706f5a57356e6147567064476.jpg"><title>IO的理解和学习（未完善） | 布小新的博客</title><link ref="canonical" href="http://example.com/2022/04/26/IO/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.0.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-tree"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-book"></i></span><span class="header-nav-menu-item__text">关于</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="javascript:;" onclick="return false;"><span class="header-nav-menu-item__icon"><i class="fas fa-cat"></i></span><span class="header-nav-menu-item__text">生活</span></a><div class="header-nav-submenu"><div class="header-nav-submenu-item"><a class="header-nav-submenu-item__link" href="/html/reading/"><span class="header-nav-submenu-item__icon"><i class="fas fa-book-reader"></i></span><span class="header-nav-submenu-item__text">阅读</span></a></div></div></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">布小新的博客</div><div class="header-banner-info__subtitle">欢迎来到我的博客</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div><script src="/live2d-widget-master/autoload.js"></script></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">IO的理解和学习（未完善）</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-04-26</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-04-26</span></span></div></header><div class="post-body">
+        <h1 id="I-x2F-O"   >
+          <a href="#I-x2F-O" class="heading-link"><i class="fas fa-link"></i></a><a href="#I-x2F-O" class="headerlink" title="I&#x2F;O"></a>I&#x2F;O</h1>
+      
+        <h2 id="什么是I-x2F-O"   >
+          <a href="#什么是I-x2F-O" class="heading-link"><i class="fas fa-link"></i></a><a href="#什么是I-x2F-O" class="headerlink" title="什么是I&#x2F;O"></a>什么是I&#x2F;O</h2>
+      <p>什么是I&#x2F;O，这里你需要知道一个图 冯诺依曼结构体系</p>
+<p>计算机 输入设备 输出设备 控制器 运算器 和存储器<img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139303632343132323132363339382e6a7065673f782d6f73732d70726f636573733d696d6167652f77617465726d61726b2c747970655f5a6d46755a33706f5a57356e6147567064476.jpg" alt="68747470733a2f2f696d672d626c6f672e6373646e696d672e636e2f32303139303632343132323132363339382e6a7065673f782d6f73732d70726f636573733d696d6167652f77617465726d61726b2c747970655f5a6d46755a33706f5a57356e6147567064476"></p>
+<p>I&#x2F;O就是描述了计算机系统与外部设备之间通信的过程</p>
+<p>再从应用程序上了解I&#x2F;O</p>
+<p>首先为了保证操作系统的稳定性和安全性，一个进程的地址空间被划分为用户空间（User Space）和内核空间（Kernel Space）</p>
+<p>应用程序都是运行在用户空间上，而内核空间才能进行系统态级别的资源有关的操作，比如如文件管理、进程通信、内存管理等等。也就是说，我们想要进行 IO 操作，一定是要依赖内核空间的能力。</p>
+<p>我们也不能直接访问内核空间，需要通过发起系统调用，让操作系统来做</p>
+<p>（这里讲一下为了避免频繁的I&#x2F;O操作，会存在缓冲区的概念,详情 见目录）：</p>
+<p>当应用程序发起 I&#x2F;O 调用后，会经历两个步骤：</p>
+<ol>
+<li>内核等待 I&#x2F;O 设备准备好数据</li>
+<li>内核将数据从内核空间拷贝到用户空间。</li>
+</ol>
+
+        <h2 id="内核缓冲与进程缓冲区"   >
+          <a href="#内核缓冲与进程缓冲区" class="heading-link"><i class="fas fa-link"></i></a><a href="#内核缓冲与进程缓冲区" class="headerlink" title="内核缓冲与进程缓冲区"></a>内核缓冲与进程缓冲区</h2>
+      <p>缓冲区的目的，是为了减少频繁的系统IO调用。大家都知道，系统调用需要保存之前的进程数据和状态等信息，而结束调用之后回来还需要恢复之前的信息，为了减少这种损耗时间、也损耗性能的系统调用，于是出现了缓冲区。</p>
+<p>有了缓冲区，操作系统使用read函数把数据从内核缓冲区复制到进程缓冲区，write把数据从进程缓冲区复制到内核缓冲区中。等待缓冲区达到一定数量的时候，再进行IO的调用，提升性能。至于什么时候读取和存储则由内核来决定，用户程序不需要关心。</p>
+<p>在linux系统中，系统内核也有个缓冲区叫做内核缓冲区。每个进程有自己独立的缓冲区，叫做进程缓冲区。</p>
+<p>所以，用户程序的IO读写程序，大多数情况下，并没有进行实际的IO操作，而是在读写自己的进程缓冲区。</p>
+
+        <h2 id="java-IO读写的底层流程"   >
+          <a href="#java-IO读写的底层流程" class="heading-link"><i class="fas fa-link"></i></a><a href="#java-IO读写的底层流程" class="headerlink" title="java IO读写的底层流程"></a>java IO读写的底层流程</h2>
+      <p>用户程序进行IO的读写，基本上会用到系统调用read&amp;write，read把数据从内核缓冲区复制到进程缓冲区，write把数据从进程缓冲区复制到内核缓冲区，它们不等价于数据在内核缓冲区和磁盘之间的交换。</p>
+<p><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/20190105163657587.png" alt="20190105163657587"></p>
+<p>首先看看一个典型Java 服务端处理网络请求的典型过程：</p>
+<p>（1）客户端请求</p>
+<p>Linux通过网卡，读取客户断的请求数据，将数据读取到内核缓冲区。</p>
+<p>（2）获取请求数据</p>
+<p>服务器从内核缓冲区读取数据到Java进程缓冲区。</p>
+<p>（1）服务器端业务处理</p>
+<p>Java服务端在自己的用户空间中，处理客户端的请求。</p>
+<p>（2）服务器端返回数据</p>
+<p>Java服务端已构建好的响应，从用户缓冲区写入系统缓冲区。</p>
+<p>（3）发送给客户端</p>
+<p>Linux内核通过网络 I&#x2F;O ，将内核缓冲区中的数据，写入网卡，网卡通过底层的通讯协议，会将数据发送给目标客户端。</p>
+
+        <h2 id="BIO"   >
+          <a href="#BIO" class="heading-link"><i class="fas fa-link"></i></a><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h2>
+      <p>在linux中的Java进程中，默认情况下所有的socket都是blocking IO。在阻塞式 I&#x2F;O 模型中，应用程序在从IO系统调用开始，一直到到系统调用返回，这段时间是阻塞的。返回成功后，应用进程开始处理用户空间的缓存数据。</p>
+<p><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20190105163801795.jpg"><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/20190105163801795.jpg" alt="在这里插入图片描述"></a></p>
+<p>举个栗子，发起一个blocking socket的read读操作系统调用，流程大概是这样：</p>
+<p>（1）当用户线程调用了read系统调用，内核（kernel）就开始了IO的第一个阶段：准备数据。很多时候，数据在一开始还没有到达（比如，还没有收到一个完整的Socket数据包），这个时候kernel就要等待足够的数据到来。</p>
+<p>（2）当kernel一直等到数据准备好了，它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
+<p>（3）从开始IO读的read系统调用开始，用户线程就进入阻塞状态。一直到kernel返回结果后，用户线程才解除block的状态，重新运行起来。</p>
+<p>所以，blocking IO的特点就是在内核进行IO执行的两个阶段，用户线程都被block了。</p>
+<p>BIO的优点：</p>
+<p>程序简单，在阻塞等待数据期间，用户线程挂起。用户线程基本不会占用 CPU 资源。</p>
+<p>BIO的缺点：</p>
+<p>一般情况下，会为每个连接配套一条独立的线程，或者说一条线程维护一个连接成功的IO流的读写。在并发量小的情况下，这个没有什么问题。但是，当在高并发的场景下，需要大量的线程来维护大量的网络连接，内存、线程切换开销会非常巨大。因此，基本上，BIO模型在高并发场景下是不可用的。</p>
+
+        <h2 id="NIO"   >
+          <a href="#NIO" class="heading-link"><i class="fas fa-link"></i></a><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2>
+      <p>在linux系统下，可以通过设置socket使其变为non-blocking。NIO 模型中应用程序在一旦开始IO系统调用，会出现以下两种情况：</p>
+<p>（1）在内核缓冲区没有数据的情况下，系统调用会立即返回，返回一个调用失败的信息。</p>
+<p>（2）在内核缓冲区有数据的情况下，是阻塞的，直到数据从内核缓冲复制到用户进程缓冲。复制完成后，系统调用返回成功，应用进程开始处理用户空间的缓存数据。<br><a target="_blank" rel="noopener" href="https://img-blog.csdnimg.cn/20190105163821398.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NyYXp5bWFrZXJjaXJjbGU=,size_16,color_FFFFFF,t_70"><img src="https://gitee.com/buxiaoxin2333/pic-bed/raw/master/img/20190105163821398.jpg" alt="在这里插入图片描述"></a></p>
+<p>举个栗子。发起一个non-blocking socket的read读操作系统调用，流程是这个样子：</p>
+<p>（1）在内核数据没有准备好的阶段，用户线程发起IO请求时，立即返回。用户线程需要不断地发起IO系统调用。</p>
+<p>（2）内核数据到达后，用户线程发起系统调用，用户线程阻塞。内核开始复制数据。它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
+<p>（3）用户线程才解除block的状态，重新运行起来。经过多次的尝试，用户线程终于真正读取到数据，继续执行。</p>
+<p>NIO的特点：</p>
+<p>应用程序的线程需要不断的进行 I&#x2F;O 系统调用，轮询数据是否已经准备好，如果没有准备好，继续轮询，直到完成系统调用为止。</p>
+<p>NIO的优点：每次发起的 IO 系统调用，在内核的等待数据过程中可以立即返回。用户线程不会阻塞，实时性较好。</p>
+<p>NIO的缺点：需要不断的重复发起IO系统调用，这种不断的轮询，将会不断地询问内核，这将占用大量的 CPU 时间，系统资源利用率较低。</p>
+<p>总之，NIO模型在高并发场景下，也是不可用的。一般 Web 服务器不使用这种 IO 模型。一般很少直接使用这种模型，而是在其他IO模型中使用非阻塞IO这一特性。java的实际开发中，也不会涉及这种IO模型。</p>
+<p>再次说明，Java NIO（New IO） 不是IO模型中的NIO模型，而是另外的一种模型，叫做IO多路复用模型（ IO multiplexing ）。</p>
+
+        <h2 id="I-x2F-O多路复用"   >
+          <a href="#I-x2F-O多路复用" class="heading-link"><i class="fas fa-link"></i></a><a href="#I-x2F-O多路复用" class="headerlink" title="I&#x2F;O多路复用"></a>I&#x2F;O多路复用</h2>
+      <p>就拿连接来看多路复用可以应用于多个连接下，因为他是基于select，epoll的系统调用的<img src="C:\Users\wcy\Desktop\学习笔记\20190105163846560.jpg" alt="20190105163846560">系统调用</p>
+<p>而这里我想说连接的数据一般会通过网卡转入内核空间，select就像是一个监控，多个连接的状态下，谁的连接数据先在内核中准备好，就给用户空间一个响应，然后用户空间才开始read知道内核空间数据复制到了用户空间</p>
+<p>在这种模式中，首先不是进行read系统调动，而是进行select&#x2F;epoll系统调用。当然，这里有一个前提，需要将目标网络连接，提前注册到select&#x2F;epoll的可查询socket列表中。然后，才可以开启整个的IO多路复用模型的读流程。</p>
+<p>（1）进行select&#x2F;epoll系统调用，查询可以读的连接。kernel会查询所有select的可查询socket列表，当任何一个socket中的数据准备好了，select就会返回。</p>
+<p>当用户进程调用了select，那么整个线程会被block（阻塞掉）。</p>
+<p>（2）用户线程获得了目标连接后，发起read系统调用，用户线程阻塞。内核开始复制数据。它就会将数据从kernel内核缓冲区，拷贝到用户缓冲区（用户内存），然后kernel返回结果。</p>
+<p>（3）用户线程才解除block的状态，用户线程终于真正读取到数据，继续执行。</p>
+<p>多路复用IO的特点：</p>
+<p>IO多路复用模型，建立在操作系统kernel内核能够提供的多路分离系统调用select&#x2F;epoll基础之上的。多路复用IO需要用到两个系统调用（system call）， 一个select&#x2F;epoll查询调用，一个是IO的读取调用。</p>
+<p>和NIO模型相似，多路复用IO需要轮询。负责select&#x2F;epoll查询调用的线程，需要不断的进行select&#x2F;epoll轮询，查找出可以进行IO操作的连接。</p>
+<p>另外，多路复用IO模型与前面的NIO模型，是有关系的。对于每一个可以查询的socket，一般都设置成为non-blocking模型。只是这一点，对于用户程序是透明的（不感知）。</p>
+<p>多路复用IO的优点：</p>
+<p>用select&#x2F;epoll的优势在于，它可以同时处理成千上万个连接（connection）。与一条线程维护一个连接相比，I&#x2F;O多路复用技术的最大优势是：系统不必创建线程，也不必维护这些线程，从而大大减小了系统的开销。</p>
+<p>Java的NIO（new IO）技术，使用的就是IO多路复用模型。在linux系统上，使用的是epoll系统调用。</p>
+<p>多路复用IO的缺点：</p>
+<p>本质上，select&#x2F;epoll系统调用，属于同步IO，也是阻塞IO。都需要在读写事件就绪后，自己负责进行读写，也就是说这个读写过程是阻塞的。</p>
+
+        <h2 id="异步I-x2F-O（AIO）"   >
+          <a href="#异步I-x2F-O（AIO）" class="heading-link"><i class="fas fa-link"></i></a><a href="#异步I-x2F-O（AIO）" class="headerlink" title="异步I&#x2F;O（AIO）"></a>异步I&#x2F;O（AIO）</h2>
+      <p>这是真正的非阻塞I&#x2F;O，通过用户线程调用read系统调用，然后立刻返回去做其他事情，不阻塞</p>
+<p>而内核就开始数据准备工作，而数据就绪后就直接复制到用户空间，最后kernel会给用户线程发送一个信号（signal），或者回调用户线程注册的回调接口，告诉用户线程read操作完成了。用户线程读取用户缓冲区的数据，完成后续的业务操作。</p>
+<p>异步IO模型的特点：</p>
+<p>在内核kernel的等待数据和复制数据的两个阶段，用户线程都不是block(阻塞)的。用户线程需要接受kernel的IO操作完成的事件，或者说注册IO操作完成的回调函数，到操作系统的内核。所以说，异步IO有的时候，也叫做信号驱动 IO 。</p>
+<p>异步IO模型缺点：</p>
+<p>需要完成事件的注册与传递，这里边需要底层操作系统提供大量的支持，去做大量的工作。</p>
+<p>目前来说， Windows 系统下通过 IOCP 实现了真正的异步 I&#x2F;O。但是，就目前的业界形式来说，Windows 系统，很少作为百万级以上或者说高并发应用的服务器操作系统来使用。</p>
+<p>而在 Linux 系统下，异步IO模型在2.6版本才引入，目前并不完善。所以，这也是在 Linux 下，实现高并发网络编程时都是以 IO 复用模型模式为主。</p>
+<p>这里我要补充以一下这个体系里面比较抽象的概念 就是信息的传递，尤其是那几张图所表达的东西。</p>
+<p>我们一般是通过socket来进行一些信息的的传递，而socket又是与在物理上与网卡打交道，也就是说你的程序处理socket，读操作时，其实就是启动了系统调用read，这个时候socket连接在网卡中的数据就开始传递数据到内核空间，这就是所谓的数据准备，然后再由内核空间复制到用户空间。</p>
+<p>而这里面IO多路复用的意思我大概理解一下就是说，同一时间有多个socket连接的情况下，大家都在由网卡向内核缓冲区传递数据（多个数据准备同时进行），而程序就需要不断地轮询看哪个socket传递得快，先完成数据准备的连接就可以优先进行数据复制。也就是说和NIO一样有一个轮询操作，而正是因为有这个轮询（补充一个概念：单个select 以及read 下 它是阻塞的，但是不满足它会立即返回）才有更多的操作空间，因为轮询是有间隔的，虽然每次的单个调用是阻塞的但是，每次轮询间隔就可以空出来，不像BIO，在没返回数据准备就绪之前一直阻塞的情况</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://example.com">乄帝</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://example.com/2022/04/26/IO/">http://example.com/2022/04/26/IO/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://example.com/tags/IO/">IO</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2022/03/27/Spring/"><span class="paginator-prev__text">Spring</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#I-x2F-O"><span class="toc-number">1.</span> <span class="toc-text">
+          I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFI-x2F-O"><span class="toc-number">1.1.</span> <span class="toc-text">
+          什么是I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%BC%93%E5%86%B2%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">1.2.</span> <span class="toc-text">
+          内核缓冲与进程缓冲区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java-IO%E8%AF%BB%E5%86%99%E7%9A%84%E5%BA%95%E5%B1%82%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">
+          java IO读写的底层流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BIO"><span class="toc-number">1.4.</span> <span class="toc-text">
+          BIO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NIO"><span class="toc-number">1.5.</span> <span class="toc-text">
+          NIO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#I-x2F-O%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-number">1.6.</span> <span class="toc-text">
+          I&#x2F;O多路复用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5I-x2F-O%EF%BC%88AIO%EF%BC%89"><span class="toc-number">1.7.</span> <span class="toc-text">
+          异步I&#x2F;O（AIO）</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/wallhaven-zxozdw_128x128.png" alt="avatar"></div><p class="sidebar-ov-author__text">山不在高有仙则名，水不在深有龙则灵</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/Tassdar2333" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://plus.google.com/" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-google"></i></span></a><a class="sidebar-ov-social-item" href="https://twitter.com/" target="_blank" rel="noopener" data-popover="Twitter" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-twitter"></i></span></a><a class="sidebar-ov-social-item" href="https://youtube.com/" target="_blank" rel="noopener" data-popover="Youtube" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-youtube"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">8</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">5</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">6</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><meting-js server="netease" type="playlist" fixed="true" id="7081604432"></meting-js><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>这里是我的博客</span></div><div>欢迎来到我的博客</div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.json';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"></div><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.json"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>
